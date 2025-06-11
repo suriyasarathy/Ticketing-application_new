@@ -212,6 +212,8 @@ useEffect(() => {
       console.error("Error fetching project settings:", err);
     }
   };
+        
+
   
   // Inside ProjectTickets component
   useEffect(() => {
