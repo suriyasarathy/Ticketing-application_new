@@ -2,9 +2,9 @@ const mysql = require("mysql2");
 
 // Create a connection pool (better than single connection)
 const db = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "root",
+  host: "ticketing-system.cf4s4uc0ovlv.eu-north-1.rds.amazonaws.com",
+  user: "admin",
+  password: "SARATHY(08)",
   database: "ticketing_system",
   waitForConnections: true,
   connectionLimit: 10,

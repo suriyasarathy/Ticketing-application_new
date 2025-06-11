@@ -6,6 +6,11 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CustomDateRange from "components/DatePicker";
 import {useAuth} from "../ContextData"
+import { MultiSelect } from 'primereact/multiselect';
+import 'primereact/resources/themes/saga-blue/theme.css';   // You can use any theme
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
 
 function ProjectTickets() {
   const { projectID } = useParams();
@@ -159,14 +164,14 @@ const TicketTable = ({ title, tickets, setTicketData,project_ID,currentUser }) =
 const [isStatusUpdated, setIsStatusUpdated] = useState(false);
 const [statuses, setStatuses] = useState([]);
 const [priorities, setPriorities] = useState([]);
-const defaultStatuses = ["Open", "In Progress", "Closed"];
-const defaultPriorities = ["High", "Medium", "Low"];
+    const [selectedPriorities, setSelectedPriorities] = useState([]);
+    const [selectedStatuses, setSelectedStatuses] = useState([]);
 
-  console.log("currentUser",currentUser);
+
+
   
-console.log("allow ",allowreassginticket);
 
-  console.log("insidede",project_ID);
+
   const fetchProjectUsers = async (project_ID) => {
     console.log("Fetching project users for project_ID:", project_ID);
     
@@ -206,6 +211,12 @@ useEffect(() => {
   
       const data = await response.json();
       const allowReasgin =data.allow_ticket_reassign
+        const combinePriority =[...data.custom_priorities,
+    ...data.default_priority,]
+    const combineStatus =[...data.custom_statuses,
+    ...data.default_status,]
+      setStatuses(combineStatus)
+      setPriorities(combinePriority)
       setallowreassginticket(allowReasgin)
       setProjectSettings(data);
     } catch (err) {
@@ -214,7 +225,7 @@ useEffect(() => {
   };
         
 
-  
+
   // Inside ProjectTickets component
   useEffect(() => {
     if (project_ID) {
@@ -291,10 +302,13 @@ useEffect(() => {
   // });
   const filteredTickets = (tickets || []).filter((ticket) => {
     if (!ticket) return false; // Ensure ticket is not undefined/null
-    console.log("ticket_created_date:", ticket.ticket_created_date);
-    console.log("due_date:", ticket.due_date);
-    const matchesPriority = priorityFilter ? ticket.priority === priorityFilter : true;
-    const matchesStatus = statusFilter ? ticket.status === statusFilter : true;
+    const matchesPriority = priorityFilter?.length
+  ? priorityFilter.includes(ticket.priority?.toLowerCase())
+  : true;
+  
+    const matchesStatus =  statusFilter?.length
+  ? statusFilter.includes(ticket.status?.toLowerCase())
+  : true;;
   
     const ticketCreatedDate = new Date(ticket.ticket_created_date);
     const ticketDueDate = new Date(ticket.due_date);
@@ -389,8 +403,15 @@ const handleReassignTicket = async (ticketId, userId) => {
   }
 };
 
-
-
+ const priorityOptions = priorities.map(p => ({
+        label: p,
+        value: p.toLowerCase()
+    }));
+    
+ const StatsuOptions = statuses.map(p => ({
+        label: p,
+        value: p.toLowerCase()
+    }));
 
   return (
     <>  <div className="row">
@@ -403,15 +424,21 @@ const handleReassignTicket = async (ticketId, userId) => {
     <th className="text-center">TICKET #</th>
     <th className="text-center">TITLE</th>
     <th className="text-center">
-      <div className="d-flex flex-column align-items-center">
+       <div className="d-flex flex-column align-items-center">
         PRIORITY
-        <select className="form-select mt-1" style={{ width: "120px" }} onChange={(e) => setPriorityFilter(e.target.value)}>
-          <option value="">All</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
+     <MultiSelect
+  value={selectedPriorities}
+  options={priorityOptions}
+  onChange={(e) => {
+    setSelectedPriorities(e.value);
+    setPriorityFilter(e.value.map(p => p.toLowerCase())); // normalize for filtering
+  }}
+  optionLabel="label"
+  placeholder="Select Priorities"
+  className="w-full md:w-14rem"
+  display="chip"
+/>
+</div>
     </th>
     <th className="text-center">
       <div className="d-flex flex-column align-items-center">
@@ -428,13 +455,18 @@ const handleReassignTicket = async (ticketId, userId) => {
     <th className="text-center">
       <div className="d-flex flex-column align-items-center">
         STATUS
-        <select className="form-select mt-1" style={{ width: "120px" }} onChange={(e) => setStatusFilter(e.target.value)}>
-          <option value="">All</option>
-          <option value="In open">Open</option>
-          <option value="In progress">In Progress</option>
-          <option value="resolved">Resolved</option>
-          <option value="closed">Closed</option>
-        </select>
+        <MultiSelect
+  value={selectedStatuses}
+  options={StatsuOptions}
+  onChange={(e) => {
+    setSelectedStatuses(e.value);
+    setStatusFilter(e.value.map(p => p.toLowerCase())); // normalize for filtering
+  }}
+  optionLabel="label"
+  placeholder="Select Priorities"
+  className="w-full md:w-14rem"
+  display="chip"
+/>
       </div>
     </th>
     <th className="text-center"># DATES</th>

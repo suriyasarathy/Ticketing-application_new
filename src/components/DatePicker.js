@@ -7,10 +7,12 @@ import "react-date-range/dist/theme/default.css";
 const DateRangeFilter = ({ onFilterChange}) => {
   const [showPicker, setShowPicker] = useState(false);
   const [dateRange, setDateRange] = useState({
-    startDate: new Date(),
+    startDate:new Date(new Date().getFullYear(), 0, 1),
     endDate: new Date(),
     key: "selection",
   });
+ const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+  const today = new Date();
 
   const handleDateChange = (range) => {
     setDateRange(range.selection);
@@ -19,13 +21,14 @@ const DateRangeFilter = ({ onFilterChange}) => {
 
   const resetDates = () => {
     setDateRange({
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: startOfYear,
+      endDate:today,
       key: "selection",
     });
+    setShowPicker(false)
     onFilterChange({
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: startOfYear,
+      endDate: today,
       key: "selection",
     });
   };
