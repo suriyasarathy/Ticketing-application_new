@@ -424,21 +424,34 @@ const handleReassignTicket = async (ticketId, userId) => {
     <th className="text-center">TICKET #</th>
     <th className="text-center">TITLE</th>
     <th className="text-center">
-       <div className="d-flex flex-column align-items-center">
-        PRIORITY
-     <MultiSelect
-  value={selectedPriorities}
-  options={priorityOptions}
-  onChange={(e) => {
-    setSelectedPriorities(e.value);
-    setPriorityFilter(e.value.map(p => p.toLowerCase())); // normalize for filtering
-  }}
-  optionLabel="label"
-  placeholder="Select Priorities"
-  className="w-full md:w-14rem"
-  display="chip"
-/>
+      <div
+  className="d-flex flex-column align-items-center"
+  style={{ minWidth: "300px", width: "100%" }}
+>
+  <label className="mb-1">PRIORITY</label>
+  <div
+    style={{
+      width: "75%",
+      maxWidth: "320px",
+      minHeight: "42px"
+    }}
+  >
+    <MultiSelect
+      value={selectedPriorities}
+      options={priorityOptions}
+      onChange={(e) => {
+        setSelectedPriorities(e.value);
+        setPriorityFilter(e.value.map(p => p.toLowerCase()));
+      }}
+      optionLabel="label"
+      placeholder="Select Priorities"
+      className="w-100"
+      display="chip"
+      maxSelectedLabels={4} // optional: shows "+n more" after 4 chips
+    />
+  </div>
 </div>
+
     </th>
     <th className="text-center">
       <div className="d-flex flex-column align-items-center">

@@ -30,14 +30,18 @@ function Header() {
   };
 
 const handleLogout = async () => {
-  // await fetch('http://localhost:3000/logout', {
-  //   method: 'POST',
-  //   credentials: 'include',
-  // });
-  //   localStorage.removeItem("authToken"); // Clear token
-
-  // navigate('/login');
+  try {
+    await fetch('http://localhost:3000/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+    logout(); // Clear context/auth state
+    navigate('/login'); // Redirect to login
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
 };
+
 
 
   return (
@@ -152,7 +156,7 @@ const handleLogout = async () => {
               </Dropdown.Menu>
             </Dropdown>
             <Nav.Item>
-              <Nav.Link className="m-0" href="#pablo" onClick={handleLogout()}>
+              <Nav.Link className="m-0" href="#pablo" onClick={handleLogout}>
                 <span className="no-icon">Log out</span>
               </Nav.Link>
             </Nav.Item>

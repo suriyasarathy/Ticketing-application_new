@@ -19,12 +19,12 @@ useEffect(() => {
   }
 }, [user]);
 
-  console.log("userIddddddddddddddddddddddddddddddddddddddddddddd",userId);
   
   const { setSelectedProject } = useProject(); // Get the context function
     const { logout } = useAuth();
   
   useEffect(() => {
+    if (!userId) return
     fetch(`http://localhost:3000/projects/${userId}`, {
       method: "GET",
       headers: {
@@ -43,23 +43,7 @@ useEffect(() => {
   return (
     <div className="container mt-4">
    {/* ✅ Profile button aligned to top-right */}
-   <div className="d-flex justify-content-end mb-3">
-      <Button
-        variant="secondary"
-        onClick={() => navigate("/Create_Project")}
-        className="fw-bold px-4 me-2" // Add margin to the right
-      > create project </Button>
-    <Button onClick={onchangeLogin}>Log out</Button>
-        <Button
-          variant="primary"
-          onClick={() => navigate(`/User-Profile/${userId}`)}
-          className="fw-bold px-4"
-        >
-          Profile
-        </Button>
-
-      </div>
-      <h2 className="text-center mb-4">Projects</h2>
+   
       {projects.length === 0 ? (
         <p className="text-muted text-center">No projects found</p>
       ) : (

@@ -58,7 +58,7 @@ const Login = () => {
         console.log("Admin user detected, redirecting to admin dashboard");
         navigate("/admin/dashbaord");
       } else {
-        navigate("/ProjectList");
+         navigate("/developer/projectlist");
       }
     } else {
       setError(data.message || "Invalid credentials");

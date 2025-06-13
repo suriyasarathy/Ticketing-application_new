@@ -32,6 +32,7 @@ import ClientForm from "views/Project/ClientForm";
 import Team_mangement from "views/admin/Team_mangement";
 import SessionManager from "views/SessionManager";
 import Dashboard from "views/Dashboard";
+import Developer from "../src/layouts/Developer"; // 👈 Import Developer Layout
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -44,6 +45,8 @@ root.render(
         
         <Route path="/login" element={<Login />} />
         <Route path="/admin/*" element={<Admin />} />
+          <Route path="/developer/*" element={<Developer />} /> {/* 👈 Add this */}
+
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/user" element={<User />} />
         <Route path="/forgot-password" element={<LoginForget />} />
